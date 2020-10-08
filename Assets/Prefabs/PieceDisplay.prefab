@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3427826207402727695
 CanvasRenderer:
@@ -87,8 +87,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c69bf853473f12e4ba39dd73f73aa3b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls: []
+  OnPointerEnter_Event:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerDown_Event:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerClick_Event:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerUp_Event:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerExit_Event:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBeginDrag_Event:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndDrag_Event:
+    m_PersistentCalls:
+      m_Calls: []

@@ -55,7 +55,7 @@ namespace Sweet_And_Salty_Studios
         }
         private void ShowPossibleMoves()
         {
-            Debug.Log("SHOW POSSIBLE MOVES");
+            Debug.LogError("SHOW POSSIBLE MOVES");
         }
 
         public void OnPointerEnter(PointerEventData eventData)

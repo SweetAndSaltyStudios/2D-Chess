@@ -7,21 +7,21 @@ namespace Sweet_And_Salty_Studios
         public Player Owner { get; } = default;
         public PieceDisplay PieceDisplay { get; } = default;
         public COLOR_TYPE Color { get; } = default;
-        public Vector2Int[] MoveDirections { get; } = default;
         public Vector2Int Coordinates { get; set; } = default;
+        public PieceMove PieceMove { get; }
 
         private Cell[] _validCells = default;
 
-        public Piece(Player owner, Board board, PieceDisplay pieceDisplay, COLOR_TYPE color, Vector2Int[] moveDirections)
+        public Piece(Player owner, Board board, PieceDisplay pieceDisplay, COLOR_TYPE color, PieceMove pieceMove)
         {
             Owner = owner;
             PieceDisplay = pieceDisplay;
             Color = color;
-            MoveDirections = moveDirections;
+            PieceMove = pieceMove;
 
             PieceDisplay.OnPointerDown_Event.AddListener(() =>
             {
-                _validCells = board.GetValidCells(this, MoveDirections);
+                _validCells = board.GetValidCells(this);
 
                 foreach(var cell in _validCells)
                 {

@@ -37,19 +37,25 @@ namespace Sweet_And_Salty_Studios
             }
         }
 
-        public Cell[] GetValidCells(Piece piece, Vector2Int[] movePositions)
+        public Cell[] GetValidCells(Piece piece)
         {
             var cells = new List<Cell>();
 
-            foreach(var movePosition in movePositions)
+            var moveDirections = piece.PieceMove.MoveDirections;
+            var moveDistance = piece.PieceMove.MoveDistance;
+
+            for(var i = 0; i < moveDirections.Length; i++)
             {
-                var cell = GetCell(piece.Coordinates + movePosition);
+                for(var j = 1; j <= moveDistance; j++)
+                {
+                    var targetCoordinates = piece.Coordinates + moveDirections[i] * j;
+                    
+                    var cell = GetCell(targetCoordinates);
 
-                if(CheckIfValidMove(cell) == false) continue;
+                    if(CheckIfValidMove(cell) == false) continue;
 
-                cells.Add(cell);
-
-                //Debug.LogError($"Cell {cell.Coordinates}", cell.CellDisplay);
+                    cells.Add(cell);
+                }
             }
 
             return cells.ToArray();
@@ -80,14 +86,14 @@ namespace Sweet_And_Salty_Studios
         {
             for(int i = 0; i < 8; i++)
             {
-                pieces[i].Coordinates = new Vector2Int(pawnColumn, i);
+                pieces[i].Coordinates = new Vector2Int(i, pawnColumn);
 
-                pieces[i].PieceDisplay.transform.position = cells[pawnColumn, i].CellDisplay.transform.position;
+                pieces[i].PieceDisplay.transform.position = cells[i, pawnColumn].CellDisplay.transform.position;
 
 
-                pieces[i + 8].Coordinates = new Vector2Int(pawnColumn, i);
+                pieces[i + 8].Coordinates = new Vector2Int(i, royaltyColumn);
 
-                pieces[i + 8].PieceDisplay.transform.position = cells[royaltyColumn, i].CellDisplay.transform.position;
+                pieces[i + 8].PieceDisplay.transform.position = cells[i, royaltyColumn].CellDisplay.transform.position;
             }
         }
     }

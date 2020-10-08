@@ -10,15 +10,21 @@ namespace Sweet_And_Salty_Studios
         [SerializeField] private RectTransform _playArea = default;
 
         private IGame _currentGame = default;
-
         private Coroutine _currentlyRunningGame_Coroutine = default;
 
         public static GameManager Instance { get; private set; }
 
         private void Awake() => Initialize();
-        private void Start() 
+        private void Start() => StartGame();
+
+        private void Initialize()
         {
-             _currentGame = CreateGame(_gameType);
+            if(Instance == null) Instance = this;
+            else Destroy(gameObject);
+        }
+        private void StartGame()
+        {
+            _currentGame = CreateGame(_gameType);
 
             if(_currentlyRunningGame_Coroutine != null)
             {
@@ -28,12 +34,6 @@ namespace Sweet_And_Salty_Studios
 
             _currentlyRunningGame_Coroutine = StartCoroutine(IRunGame(_currentGame));
         }
-        private void Initialize()
-        {
-            if(Instance == null) Instance = this;
-            else Destroy(gameObject);
-        }
-
         private IEnumerator IRunGame(IGame game)
         {
             yield return game.ISetup();
@@ -46,7 +46,6 @@ namespace Sweet_And_Salty_Studios
 
             _currentlyRunningGame_Coroutine = null;
         }
-
         private IGame CreateGame(GAME_TYPE gameType)
         {
             // TODO: Make this more generic
@@ -60,24 +59,23 @@ namespace Sweet_And_Salty_Studios
             };
 
             var player_1 = new Player(
+                ATTACK_DIRECTION.UP,
                 board,
                 COLOR_TYPE.WHITE,
                 pieceMap,
                 ResourceManager.Instance.SpawnInstance<PlayerDisplay>("Player 1", _playArea));
 
             var player_2 = new Player(
+                ATTACK_DIRECTION.DOWN,
                 board,
                 COLOR_TYPE.BLACK,
                 pieceMap,
                 ResourceManager.Instance.SpawnInstance<PlayerDisplay>("Player 2", _playArea));
 
-            switch(gameType)
-            {
-                case GAME_TYPE.LOCAL_SINGLE: return new LocalSingleGame(board, player_1, player_2);
-                case GAME_TYPE.LOCAL_MULTIPLAYER: return new LocalMultiplayerGame(board, player_1, player_2);
-                case GAME_TYPE.NETWORK_MULTIPLAYER: return new NetworkMultiplayerGame(board, player_1, player_2);
-                default: return default;
+                if(gameType == GAME_TYPE.LOCAL_MULTIPLAYER) return new LocalMultiplayerGame(board, player_1, player_2);
+                if(gameType == GAME_TYPE.LOCAL_SINGLE)  return new LocalSingleGame(board, player_1, player_2);
+                if(gameType == GAME_TYPE.NETWORK_MULTIPLAYER) return new NetworkMultiplayerGame(board, player_1, player_2);
+                else return default;
             }
-        }
     }
 }

@@ -20,8 +20,8 @@ namespace Sweet_And_Salty_Studios
             // We need to yield so boards grid layout can update cell display objects position...
             yield return null;
 
-            _board.PlacePieces(6, 7, _player_1.Pieces);
-            _board.PlacePieces(1, 0, _player_2.Pieces);
+            _board.PlacePieces(1, 0, _player_1.Pieces);
+            _board.PlacePieces(6, 7, _player_2.Pieces);
 
             yield return null;
         }
