@@ -1,9 +1,12 @@
-﻿namespace Sweet_And_Salty_Studios
+﻿using UnityEngine;
+
+namespace Sweet_And_Salty_Studios
 {
     public class Rook : Piece
     {
-        public Rook(PieceDisplay pieceDisplay, COLOR_TYPE color) : base(pieceDisplay, color)
+        public Rook(Player owner, Board board, PieceDisplay pieceDisplay, COLOR_TYPE color, Vector2Int[] movePositions) : base(owner, board, pieceDisplay, color, movePositions)
         {
+
         }
     }
 }

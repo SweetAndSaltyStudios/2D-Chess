@@ -7,6 +7,7 @@ namespace Sweet_And_Salty_Studios
         private Board _board = default;
         private Player _player_1 = default;
         private Player _player_2 = default;
+
         public LocalMultiplayerGame(Board board, Player player_1, Player player_2)
         {
             _board = board;

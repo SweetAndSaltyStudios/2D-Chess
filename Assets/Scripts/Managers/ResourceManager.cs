@@ -3,16 +3,6 @@ using UnityEngine;
 
 namespace Sweet_And_Salty_Studios
 {
-    [Serializable]
-    public class PieceSpriteSet
-    {
-        [SerializeField] private Sprite[] _whiteSprites;
-        [SerializeField] private Sprite[] _blackSprites;
-
-        public Sprite[] WhiteSprites { get => _whiteSprites; }
-        public Sprite[] BlackSprites { get => _blackSprites; }
-    }
-
     public class ResourceManager : MonoBehaviour
     {
         [Space]
@@ -42,6 +32,7 @@ namespace Sweet_And_Salty_Studios
 
         public Sprite GetSpriteByType(Type pieceType, COLOR_TYPE colorType)
         {
+            // TODO: ...
             if(pieceType == typeof(Pawn)) return colorType == COLOR_TYPE.WHITE ? _pieceSpriteSets.WhiteSprites[0] : _pieceSpriteSets.BlackSprites[0];
             if(pieceType == typeof(Rook)) return colorType == COLOR_TYPE.WHITE ? _pieceSpriteSets.WhiteSprites[1] : _pieceSpriteSets.BlackSprites[1];
             if(pieceType == typeof(Knight)) return colorType == COLOR_TYPE.WHITE ? _pieceSpriteSets.WhiteSprites[2] : _pieceSpriteSets.BlackSprites[2];

@@ -1,51 +1,95 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Sweet_And_Salty_Studios
 {
-    public class PieceDisplay : EventTrigger
+    public class MoveUnityEvent : UnityEvent<Vector3> { }
+    public class PieceDisplay : MonoBehaviour,
+    IPointerEnterHandler, 
+    IEventSystemHandler, 
+    IPointerExitHandler,
+    IPointerDownHandler, 
+    IPointerUpHandler, 
+    IPointerClickHandler, 
+    IBeginDragHandler, 
+    IDragHandler, 
+    IEndDragHandler
     {
+        public UnityEvent OnPointerEnter_Event = new UnityEvent();
+        public UnityEvent OnPointerDown_Event = new UnityEvent();
+        public UnityEvent OnPointerClick_Event = new UnityEvent();
+        public UnityEvent OnPointerUp_Event = new UnityEvent();
+        public UnityEvent OnPointerExit_Event = new UnityEvent();
+        public UnityEvent OnBeginDrag_Event = new UnityEvent();
+        public UnityEvent<Vector3> OnDrag_Event = new MoveUnityEvent();
+        public UnityEvent OnEndDrag_Event = new UnityEvent();
+
         public Image Image { get => GetComponent<Image>(); }
 
-        public override void OnPointerEnter(PointerEventData eventData)
+        private void Awake() => RegisterListeners();
+        private void OnDestroy() => RemoveAllListeners();
+
+        private void RegisterListeners()
         {
-            base.OnPointerEnter(eventData);
+            OnDrag_Event.AddListener(Move);
+            OnPointerDown_Event.AddListener(ShowPossibleMoves);
         }
 
-        public override void OnPointerDown(PointerEventData eventData)
+        private void RemoveAllListeners()
         {
-            base.OnPointerDown(eventData);
+            OnPointerEnter_Event.RemoveAllListeners();
+            OnPointerDown_Event.RemoveAllListeners();
+            OnPointerClick_Event.RemoveAllListeners();
+            OnPointerUp_Event.RemoveAllListeners();
+            OnPointerExit_Event.RemoveAllListeners();
+            OnBeginDrag_Event.RemoveAllListeners();
+            OnDrag_Event.RemoveAllListeners();
+            OnEndDrag_Event.RemoveAllListeners();
         }
 
-        public override void OnPointerClick(PointerEventData eventData)
+        private void Move(Vector3 deltaPosition)
         {
-            base.OnPointerClick(eventData);
+            transform.position += deltaPosition;
+        }
+        private void ShowPossibleMoves()
+        {
+            Debug.Log("SHOW POSSIBLE MOVES");
         }
 
-        public override void OnPointerUp(PointerEventData eventData)
+        public void OnPointerEnter(PointerEventData eventData)
         {
-            base.OnPointerUp(eventData);
+            OnPointerEnter_Event?.Invoke();
+        }
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            OnPointerDown_Event?.Invoke();
+        }
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            OnPointerClick_Event?.Invoke();
+        }
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            OnPointerUp_Event?.Invoke();
+        }
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            OnPointerExit_Event?.Invoke();
         }
 
-        public override void OnPointerExit(PointerEventData eventData)
+        public void OnBeginDrag(PointerEventData eventData)
         {
-            base.OnPointerExit(eventData);
+            OnBeginDrag_Event?.Invoke();
         }
-
-        public override void OnBeginDrag(PointerEventData eventData)
+        public void OnDrag(PointerEventData eventData)
         {
-            base.OnBeginDrag(eventData);
+            OnDrag_Event?.Invoke(eventData.delta);
         }
-        public override void OnDrag(PointerEventData eventData)
+        public void OnEndDrag(PointerEventData eventData)
         {
-            base.OnBeginDrag(eventData);
-
-            transform.position += (Vector3)eventData.delta;
-        }
-        public override void OnEndDrag(PointerEventData eventData)
-        {
-            base.OnBeginDrag(eventData);
+            OnEndDrag_Event?.Invoke();
         }
     }
 }

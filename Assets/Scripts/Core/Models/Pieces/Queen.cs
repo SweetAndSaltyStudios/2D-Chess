@@ -1,9 +1,12 @@
-﻿namespace Sweet_And_Salty_Studios
+﻿using UnityEngine;
+
+namespace Sweet_And_Salty_Studios
 {
     public class Queen : Piece
     {
-        public Queen(PieceDisplay pieceDisplay, COLOR_TYPE color) : base(pieceDisplay, color)
+        public Queen(Player owner, Board board, PieceDisplay pieceDisplay, COLOR_TYPE color, Vector2Int[] movePositions) : base(owner, board, pieceDisplay, color, movePositions)
         {
+
         }
     }
 }

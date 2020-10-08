@@ -1,16 +1,18 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Sweet_And_Salty_Studios
 {
     public class Board
     {
-        private readonly Vector2Int _size = default;
         private readonly BoardDisplay _boardDisplay = default;
         private readonly Cell[,] cells = default;
 
+        public Vector2Int Size { get; }
+
         public Board(Vector2Int size, BoardDisplay boardDisplay)
         {
-            _size = size;
+            Size = size;
 
             _boardDisplay = boardDisplay;
 
@@ -25,6 +27,7 @@ namespace Sweet_And_Salty_Studios
                     var cellDisplay = ResourceManager.Instance.SpawnInstance<CellDisplay>($"Cell {x} , {y}", _boardDisplay.transform);
 
                     cellDisplay.Image.sprite = (x + y) % 2 == 0 ? ResourceManager.Instance.WhiteCell : ResourceManager.Instance.BlackCell;
+                    cellDisplay.CoordinatesText.text = $"({x} , {y})";
 
                     coordinates.x = x;
                     coordinates.y = y;
@@ -34,12 +37,56 @@ namespace Sweet_And_Salty_Studios
             }
         }
 
+        public Cell[] GetValidCells(Piece piece, Vector2Int[] movePositions)
+        {
+            var cells = new List<Cell>();
+
+            foreach(var movePosition in movePositions)
+            {
+                var cell = GetCell(piece.Coordinates + movePosition);
+
+                if(CheckIfValidMove(cell) == false) continue;
+
+                cells.Add(cell);
+
+                //Debug.LogError($"Cell {cell.Coordinates}", cell.CellDisplay);
+            }
+
+            return cells.ToArray();
+        }
+
+        private Cell GetCell(Vector2Int coordinates)
+        {
+            if(coordinates.x < 0 || coordinates.x >= Size.x || coordinates.y < 0 || coordinates.y >= Size.y) 
+            {
+                //Debug.LogWarning($"Cell {coordinates} does not exist!");
+                return null;
+            }
+
+
+            return cells[coordinates.x, coordinates.y];
+        }
+
+        private bool CheckIfValidMove(Cell cell)
+        {
+            if(cell == null) return false;
+
+            if(cell.IsOccupied) return false;
+
+            return true;
+        }
+
         public void PlacePieces(int pawnColumn, int royaltyColumn, Piece[] pieces)
         {
             for(int i = 0; i < 8; i++)
             {
+                pieces[i].Coordinates = new Vector2Int(pawnColumn, i);
+
                 pieces[i].PieceDisplay.transform.position = cells[pawnColumn, i].CellDisplay.transform.position;
-                
+
+
+                pieces[i + 8].Coordinates = new Vector2Int(pawnColumn, i);
+
                 pieces[i + 8].PieceDisplay.transform.position = cells[royaltyColumn, i].CellDisplay.transform.position;
             }
         }
