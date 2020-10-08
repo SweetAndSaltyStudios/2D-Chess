@@ -7,8 +7,6 @@ namespace Sweet_And_Salty_Studios
         private Board _board = default;
         private Player _player_1 = default;
         private Player _player_2 = default;
-
-        public LocalMultiplayerGame() { }
         public LocalMultiplayerGame(Board board, Player player_1, Player player_2)
         {
             _board = board;
@@ -16,7 +14,18 @@ namespace Sweet_And_Salty_Studios
             _player_2 = player_2;
         }
 
-        public IEnumerator IEndGame()
+        public IEnumerator ISetup()
+        {
+            // We need to yield so boards grid layout can update cell display objects position...
+            yield return null;
+
+            _board.PlacePieces(6, 7, _player_1.Pieces);
+            _board.PlacePieces(1, 0, _player_2.Pieces);
+
+            yield return null;
+        }
+
+        public IEnumerator IStartGame()
         {
             yield return null;
         }
@@ -26,12 +35,7 @@ namespace Sweet_And_Salty_Studios
             yield return null;
         }
 
-        public IEnumerator ISetup()
-        {
-            yield return null;
-        }
-
-        public IEnumerator IStartGame()
+        public IEnumerator IEndGame()
         {
             yield return null;
         }

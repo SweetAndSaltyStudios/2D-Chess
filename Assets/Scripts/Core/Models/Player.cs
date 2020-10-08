@@ -5,16 +5,18 @@ namespace Sweet_And_Salty_Studios
 {
     public class Player
     {
-        private readonly COLOR_TYPE _colorType = default;
-        private readonly Piece[] _pieces = default;
-        private readonly PlayerDisplay _playerDisplay = default;
+        public COLOR_TYPE ColorType { get; } = default;
+
+        public Piece[] Pieces { get; } = default;
+
+        public PlayerDisplay PlayerDisplay { get; } = default;
 
         public Player(COLOR_TYPE colorType, Type[] pieceMap, PlayerDisplay playerDisplay)
         {
-            _colorType = colorType;
-            _playerDisplay = playerDisplay;
+            ColorType = colorType;
+            PlayerDisplay = playerDisplay;
 
-            CreatePieces(_colorType, pieceMap);
+            Pieces = CreatePieces(ColorType, pieceMap);
         }
 
         private Piece[] CreatePieces(COLOR_TYPE colorType, Type[] pieceMap)
@@ -23,7 +25,10 @@ namespace Sweet_And_Salty_Studios
 
             foreach(var pieceType in pieceMap)
             {
-                var pieceDisplay = ResourceManager.Instance.SpawnInstance<PieceDisplay>(pieceType.Name, _playerDisplay.transform);
+                var pieceDisplay = ResourceManager.Instance.SpawnInstance<PieceDisplay>(pieceType.Name, PlayerDisplay.transform);
+
+                pieceDisplay.Image.sprite = ResourceManager.Instance.GetSpriteByType(pieceType, ColorType);
+
                 var newPiece = new Piece(pieceDisplay, colorType);
 
                 pieces.Add(newPiece);

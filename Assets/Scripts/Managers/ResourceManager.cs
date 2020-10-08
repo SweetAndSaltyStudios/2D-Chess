@@ -1,7 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Sweet_And_Salty_Studios
 {
+    [Serializable]
+    public class PieceSpriteSet
+    {
+        [SerializeField] private Sprite[] _whiteSprites;
+        [SerializeField] private Sprite[] _blackSprites;
+
+        public Sprite[] WhiteSprites { get => _whiteSprites; }
+        public Sprite[] BlackSprites { get => _blackSprites; }
+    }
+
     public class ResourceManager : MonoBehaviour
     {
         [Space]
@@ -12,7 +23,11 @@ namespace Sweet_And_Salty_Studios
         [SerializeField] private PlayerDisplay _playerDisplayPrefab = default;
 
         [Space]
-        [Header("Sprites")]
+        [Header("Piece Sprite Sets")]
+        [SerializeField] private PieceSpriteSet _pieceSpriteSets = default;
+
+        [Space]
+        [Header("Cell Sprites")]
         [SerializeField] private Sprite _whiteCell = default;
         [SerializeField] private Sprite _blackCell = default;
 
@@ -24,6 +39,18 @@ namespace Sweet_And_Salty_Studios
         public Sprite BlackCell { get => _blackCell; }
 
         private void Awake() => Initialize();
+
+        public Sprite GetSpriteByType(Type pieceType, COLOR_TYPE colorType)
+        {
+            if(pieceType == typeof(Pawn)) return colorType == COLOR_TYPE.WHITE ? _pieceSpriteSets.WhiteSprites[0] : _pieceSpriteSets.BlackSprites[0];
+            if(pieceType == typeof(Rook)) return colorType == COLOR_TYPE.WHITE ? _pieceSpriteSets.WhiteSprites[1] : _pieceSpriteSets.BlackSprites[1];
+            if(pieceType == typeof(Knight)) return colorType == COLOR_TYPE.WHITE ? _pieceSpriteSets.WhiteSprites[2] : _pieceSpriteSets.BlackSprites[2];
+            if(pieceType == typeof(Bishop)) return colorType == COLOR_TYPE.WHITE ? _pieceSpriteSets.WhiteSprites[3] : _pieceSpriteSets.BlackSprites[3];
+            if(pieceType == typeof(Queen)) return colorType == COLOR_TYPE.WHITE ? _pieceSpriteSets.WhiteSprites[4] : _pieceSpriteSets.BlackSprites[4];
+            if(pieceType == typeof(King)) return colorType == COLOR_TYPE.WHITE ? _pieceSpriteSets.WhiteSprites[5] : _pieceSpriteSets.BlackSprites[5];
+
+            return null;
+        }
 
         private void Initialize()
         {

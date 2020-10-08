@@ -6,6 +6,8 @@ namespace Sweet_And_Salty_Studios
 {
     public class GameManager : MonoBehaviour
     {
+        [SerializeField] private RectTransform _playArea = default;
+
         private IGame _currentGame = default;
 
         private Coroutine _currentlyRunningGame_Coroutine = default;
@@ -36,11 +38,11 @@ namespace Sweet_And_Salty_Studios
             _currentlyRunningGame_Coroutine = null;
         }
 
-        private IGame CreateGame<T>() where T : IGame, new()
+        private IGame CreateGame<T>() where T : IGame
         {
             // TODO: Make this more generic
 
-            var board = new Board( Vector2Int.one * 8, ResourceManager.Instance.SpawnInstance<BoardDisplay>("Board", transform));
+            var board = new Board( Vector2Int.one * 8, ResourceManager.Instance.SpawnInstance<BoardDisplay>("Board", _playArea));
 
             var pieceMap = new Type[]
             {
@@ -51,18 +53,14 @@ namespace Sweet_And_Salty_Studios
             var player_1 = new Player(
                 COLOR_TYPE.WHITE,
                 pieceMap,
-                ResourceManager.Instance.SpawnInstance<PlayerDisplay>("Player 1"));
+                ResourceManager.Instance.SpawnInstance<PlayerDisplay>("Player 1", _playArea));
 
             var player_2 = new Player(
                 COLOR_TYPE.BLACK,
                 pieceMap,
-                ResourceManager.Instance.SpawnInstance<PlayerDisplay>("Player 2"));
+                ResourceManager.Instance.SpawnInstance<PlayerDisplay>("Player 2", _playArea));
 
-            var result = new T();
-
-            print(result);
-
-            return result;
+            return new LocalMultiplayerGame(board, player_1, player_2);
         }
     }
 }

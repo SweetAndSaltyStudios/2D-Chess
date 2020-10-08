@@ -2,22 +2,16 @@
 
 namespace Sweet_And_Salty_Studios
 {
-    public enum COLOR_TYPE
-    {
-        WHITE,
-        BLACK
-    }
-
     public class Board
     {
         private readonly Vector2Int _size = default;
         private readonly BoardDisplay _boardDisplay = default;
-
-        private Cell[,] cells = default;
+        private readonly Cell[,] cells = default;
 
         public Board(Vector2Int size, BoardDisplay boardDisplay)
         {
             _size = size;
+
             _boardDisplay = boardDisplay;
 
             cells = new Cell[size.x, size.y];
@@ -37,6 +31,16 @@ namespace Sweet_And_Salty_Studios
 
                     cells[x, y] = new Cell(coordinates, cellDisplay);
                 }
+            }
+        }
+
+        public void PlacePieces(int pawnColumn, int royaltyColumn, Piece[] pieces)
+        {
+            for(int i = 0; i < 8; i++)
+            {
+                pieces[i].PieceDisplay.transform.position = cells[pawnColumn, i].CellDisplay.transform.position;
+                
+                pieces[i + 8].PieceDisplay.transform.position = cells[royaltyColumn, i].CellDisplay.transform.position;
             }
         }
     }
